@@ -13,3 +13,65 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id          String        @id @default(uuid())
+  name        String
+  email       String        @unique
+  password    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  FoundItem   FoundItem[]
+  Claim       Claim[]
+  UserProfile UserProfile[]
+
+  @@map("user")
+}
+
+model FoundItemCategory {
+  id        String      @id @default(uuid())
+  name      String
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  FoundItem FoundItem[]
+
+  @@map("foundItemCategory")
+}
+
+model FoundItem {
+  id                String            @id @default(uuid())
+  userId            String
+  categoryId        String
+  foundItemName     String
+  description       String
+  location          String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  user              User              @relation(fields: [userId], references: [id])
+  foundItemCategory FoundItemCategory @relation(fields: [categoryId], references: [id])
+  Claim             Claim[]
+
+  @@map("foundItem")
+}
+
+model Claim {
+  id                     String    @id @default(uuid())
+  userId                 String
+  foundItemId            String
+  status                 String
+  distinguishingFeatures String
+  lostDate               DateTime
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  user                   User      @relation(fields: [userId], references: [id])
+  foundItem              FoundItem @relation(fields: [foundItemId], references: [id])
+}
+
+model UserProfile {
+  id        String   @id @default(uuid())
+  userId    String
+  bio       String
+  age       Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
+}
