@@ -7,7 +7,7 @@ app.use(cors())
 app.use(express.json());
 app.get('/',(req:Request, res: Response) => {
     res.send({
-        message: "Hello prisma."
+        message: "server is running"
     })
 })
 
