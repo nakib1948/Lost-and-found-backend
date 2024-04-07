@@ -2,7 +2,26 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const createUser = async (data: any) => {
-  console.log("data")
+  const { profile, ...userData } = data;
+  const result = await prisma.$transaction(async (transactionClient) => {
+    const createuser = await prisma.user.create({
+      data: userData,
+    });
+    const createUserProfile = await transactionClient.userProfile.create({
+      data: {
+        userId: createuser.id,
+        ...profile,
+      },
+    });
+
+    const user = {
+      ...createuser,
+      profile: createUserProfile,
+    };
+
+    return user;
+  });
+  return result;
 };
 
 export const userService = {
