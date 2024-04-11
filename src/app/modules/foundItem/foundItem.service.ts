@@ -3,6 +3,8 @@ import { Iitem } from "./foundItem.interface";
 import { jwtToken } from "../../utils/jwtToken";
 import { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
+import { calculatePagination } from "../../utils/pagination";
+import { itemSearchAbleFields } from "./foundItem.constant";
 
 const prisma = new PrismaClient();
 const createFoundItem = async (payload, token: any) => {
@@ -51,8 +53,43 @@ const createFoundItem = async (payload, token: any) => {
   return result;
 };
 
-const getFoundItem = async () => {
+const getFoundItem = async (query: any, options: any) => {
+  const { searchTerm, ...filterData } = query;
+  const { limit, page, skip } = calculatePagination(options);
+  const allQuery = [];
+
+  if (query.searchTerm) {
+    allQuery.push({
+      OR: itemSearchAbleFields.map((properites) => ({
+        [properites]: {
+          contains: query.searchTerm,
+          mode: "insensitive",
+        },
+      })),
+    });
+  }
+  if (Object.keys(filterData).length > 0) {
+    allQuery.push({
+      AND: Object.keys(filterData).map((properties) => ({
+        [properties]: {
+          equals: filterData[properties],
+        },
+      })),
+    });
+  }
+
   const result = await prisma.foundItem.findMany({
+    where: {
+      AND: allQuery,
+    },
+    skip,
+    take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? {
+            [options.sortBy]: options.sortOrder,
+          }
+        : { createdAt: "desc" },
     include: {
       user: {
         select: {
@@ -66,7 +103,15 @@ const getFoundItem = async () => {
       category: true,
     },
   });
-  return result;
+  const total = await prisma.foundItem.count({
+    where: {
+      AND: allQuery,
+    },
+  });
+  return {
+    meta: { page, limit, total },
+    data: result,
+  };
 };
 
 export const foundItemService = {
