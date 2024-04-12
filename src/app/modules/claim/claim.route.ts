@@ -13,5 +13,11 @@ router.post(
   claimController.createClaim
 );
 router.get("/", auth(), claimController.getAllClaim);
+router.put(
+  "/:cliamId",
+  auth(),
+  validateRequest(claimValidation.validateStatusUpdate),
+  claimController.updateClaimStatus
+);
 
 export const claimRoutes = router;

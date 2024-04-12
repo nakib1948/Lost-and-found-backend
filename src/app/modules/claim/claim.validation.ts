@@ -14,6 +14,10 @@ const validateItem = z.object({
     required_error: "lostDate  is required",
   }),
 });
+const validateStatusUpdate = z.object({
+    status: z.enum(["APPROVED", "PENDING", "REJECTED"])
+})
 export const claimValidation = {
   validateItem,
+  validateStatusUpdate
 };

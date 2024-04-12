@@ -24,8 +24,21 @@ const getAllClaim = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const updateClaimStatus = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization as string;
+  const id = req.params.cliamId;
+  const data = {id,status: req.body.status}
+  const result = await claimServices.updateClaimStatus(token,data);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Claim updated successfully",
+    data: result,
+  });
+});
 
 export const claimController = {
   createClaim,
-  getAllClaim
+  getAllClaim,
+  updateClaimStatus
 };

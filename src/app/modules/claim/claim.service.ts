@@ -55,7 +55,29 @@ const getAllClaim = async (token: string) => {
   return result;
 };
 
+const updateClaimStatus = async (token: string, data) => {
+  const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
+  const getUser = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: decoded.email,
+    },
+  });
+  if (!getUser) {
+    throw new Error("User not found");
+  }
+  const result = await prisma.claim.update({
+    where: {
+      id: data.id,
+    },
+    data: {
+      status: data.status,
+    },
+  });
+  return result;
+};
+
 export const claimServices = {
   createClaim,
   getAllClaim,
+  updateClaimStatus,
 };
