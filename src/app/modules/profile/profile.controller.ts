@@ -15,7 +15,19 @@ const getProfile = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
-
+const updateProfile = catchAsync(async (req: Request, res: Response) => {
+    const token = req.headers.authorization as string;
+   
+    const result = await profileServices.updateProfile(token,req.body);
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "User profile updated successfully",
+      data: result,
+    });
+  });
+  
 export const profileController = {
-    getProfile
+    getProfile,
+    updateProfile
 };
