@@ -4,6 +4,7 @@ import { authRoute } from "../modules/auth/auth.route";
 import { categoryRoutes } from "../modules/foundItemCategory/foundItemCategory.route";
 import { foundItemRoutes } from "../modules/foundItem/foundItem.route";
 import { claimRoutes } from "../modules/claim/claim.route";
+import { profileRoutes } from "../modules/profile/profile.route";
 
 const router = express.Router();
 const moduleRoutes = [
@@ -26,6 +27,10 @@ const moduleRoutes = [
   {
     path: "/claims",
     route: claimRoutes,
+  },
+  {
+    path: "/my-profile",
+    route: profileRoutes,
   },
 ];
 
