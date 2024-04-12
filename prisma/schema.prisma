@@ -58,7 +58,7 @@ model Claim {
   id                     String    @id @default(uuid())
   userId                 String
   foundItemId            String
-  status                 String
+  status                 ClaimStatus @default(PENDING)
   distinguishingFeatures String
   lostDate               DateTime
   createdAt              DateTime  @default(now())
@@ -79,4 +79,10 @@ model UserProfile {
   user      User     @relation(fields: [userId], references: [id])
 
   @@map("profile")
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
