@@ -12,14 +12,7 @@ const createFoundItem = async (payload, token: any) => {
   const getUser = await prisma.user.findUniqueOrThrow({
     where: {
       email: decoded.email,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    }
   });
   if (!getUser) {
     throw new Error("User not found");

@@ -12,5 +12,6 @@ router.post(
   validateRequest(claimValidation.validateItem),
   claimController.createClaim
 );
+router.get("/", auth(), claimController.getAllClaim);
 
 export const claimRoutes = router;

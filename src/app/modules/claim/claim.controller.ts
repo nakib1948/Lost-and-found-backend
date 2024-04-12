@@ -14,7 +14,18 @@ const createClaim = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getAllClaim = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const result = await claimServices.getAllClaim(token);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Claim retrieved successfully",
+    data: result,
+  });
+});
 
 export const claimController = {
   createClaim,
+  getAllClaim
 };
