@@ -98,7 +98,7 @@ Make sure you have the following installed:
    ```
    ### Live Link
      ```bash
-   https://lost-and-found-system-iota.vercel.app/api
+   https://lost-and-found-system-iota.vercel.app
    ```
 ### Documentation
  Follow the link to see the example how the api endpoint works with example:
