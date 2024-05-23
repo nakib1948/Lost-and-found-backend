@@ -1,6 +1,7 @@
 interface UserProfile {
   bio: string;
   age: number;
+  image: string;
 }
 
 interface CreateUserInput {

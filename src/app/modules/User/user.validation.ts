@@ -28,6 +28,11 @@ const createUser = z.object({
       invalid_type_error: "age must be number",
       required_error: "age is required",
     }),
+    image: z.string({
+      invalid_type_error: "image url must be string",
+      required_error: "image url is required",
+    }),
+
   }),
 });
 export const userValidation = {

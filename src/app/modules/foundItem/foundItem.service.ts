@@ -1,7 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Iitem } from "./foundItem.interface";
 import { jwtToken } from "../../utils/jwtToken";
-import { JwtPayload } from "jsonwebtoken";
 import config from "../../config";
 import { calculatePagination } from "../../utils/pagination";
 import { itemSearchAbleFields } from "./foundItem.constant";
