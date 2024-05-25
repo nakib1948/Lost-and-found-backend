@@ -1,5 +1,5 @@
 interface LostItem {
-  ItemCategory: string;
+  itemCategory: string;
   description: string;
   date: string;
   Location: string;

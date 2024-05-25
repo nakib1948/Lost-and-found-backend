@@ -19,6 +19,7 @@ model User {
   name        String
   email       String        @unique
   password    String
+  role        Role          @default(USER)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
   foundItem   FoundItem[]
@@ -42,9 +43,9 @@ model FoundItemCategory {
 model LostItem {
   id           String      @id @default(uuid())
   userId       String
-  ItemCategory String
+  itemCategory String
   description  String
-  date         DateTime
+  date         String
   location     String
   foundStatus  FoundStatus @default(NOTFOUND)
   phone        String
@@ -56,17 +57,22 @@ model LostItem {
 }
 
 model FoundItem {
-  id            String            @id @default(uuid())
-  userId        String
-  categoryId    String
-  foundItemName String
-  description   String
-  location      String
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  user          User              @relation(fields: [userId], references: [id])
-  category      FoundItemCategory @relation(fields: [categoryId], references: [id])
-  claim         Claim[]
+  id                  String             @id @default(uuid())
+  userId              String
+  foundItemName       String
+  itemCategory        String
+  description         String
+  date                String
+  location            String
+  phone               String
+  image               String
+  email               String
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  user                User               @relation(fields: [userId], references: [id])
+  claim               Claim[]
+  FoundItemCategory   FoundItemCategory? @relation(fields: [foundItemCategoryId], references: [id])
+  foundItemCategoryId String?
 
   @@map("foundItem")
 }
@@ -108,4 +114,9 @@ enum ClaimStatus {
 enum FoundStatus {
   FOUND
   NOTFOUND
+}
+
+enum Role {
+  USER
+  ADMIN
 }

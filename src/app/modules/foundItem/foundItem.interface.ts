@@ -1,6 +1,11 @@
 export interface Iitem {
-  categoryId : string
-  foundItemName: string
-  description: string
-  location: string
+  foundItemName: string;
+  userId:string;
+  itemCategory: string;
+  description: string;
+  date: string;
+  location: string;
+  phone: string;
+  email: string;
+  image: string;
 }

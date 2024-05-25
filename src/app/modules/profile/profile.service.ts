@@ -34,6 +34,7 @@ const getProfile = async (token: string) => {
 };
 const updateProfile = async (token: string, data) => {
   const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
+  const { name, email, ...rest } = data;
   const getUser = await prisma.user.findUniqueOrThrow({
     where: {
       email: decoded.email,
@@ -47,24 +48,40 @@ const updateProfile = async (token: string, data) => {
       userId: getUser.id,
     },
   });
+  await prisma.user.update({
+    where: {
+      id: getUser.id,
+    },
+    data: { name, email },
+  });
   const result = await prisma.userProfile.update({
     where: {
       id: getUserProfile.id,
     },
-    data: data,
+    data: rest,
     include: {
       user: {
         select: {
           id: true,
           name: true,
           email: true,
+          role: true,
           createdAt: true,
           updatedAt: true,
         },
       },
     },
   });
-  return result;
+  console.log(result);
+  const accessToken = jwtToken.generateToken(
+    {
+      email: result.user.email,
+      role: result.user.role,
+    },
+    config.jwt_secret as string,
+    config.expires_in as string
+  );
+  return { result, token: accessToken };
 };
 
 export const profileServices = {

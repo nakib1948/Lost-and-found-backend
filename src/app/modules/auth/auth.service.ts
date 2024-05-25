@@ -11,10 +11,11 @@ const login = async (payload: Ilogin) => {
   });
   if (userExist.password !== password)
     throw new Error("Password don't matched");
+  
   const accessToken = jwtToken.generateToken(
     {
       email: userExist.email,
-      role: userExist.name,
+      role: userExist.role,
     },
     config.jwt_secret as string,
     config.expires_in as string

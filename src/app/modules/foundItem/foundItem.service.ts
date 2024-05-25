@@ -3,28 +3,21 @@ import { jwtToken } from "../../utils/jwtToken";
 import config from "../../config";
 import { calculatePagination } from "../../utils/pagination";
 import { itemSearchAbleFields } from "./foundItem.constant";
+import { Iitem } from "./foundItem.interface";
 
 const prisma = new PrismaClient();
-const createFoundItem = async (payload, token: any) => {
+const createFoundItem = async (payload: Iitem, token: any) => {
   const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
   const getUser = await prisma.user.findUniqueOrThrow({
     where: {
       email: decoded.email,
-    }
+    },
   });
   if (!getUser) {
     throw new Error("User not found");
   }
-  const getCategory = await prisma.foundItemCategory.findUniqueOrThrow({
-    where: {
-      id: payload.categoryId,
-    },
-  });
-  if (!getCategory) {
-    throw new Error("Category not found");
-  }
+  
   payload.userId = getUser.id;
-
   const result = await prisma.foundItem.create({
     data: payload,
     include: {
@@ -37,7 +30,6 @@ const createFoundItem = async (payload, token: any) => {
           updatedAt: true,
         },
       },
-      category: true,
     },
   });
 
@@ -91,7 +83,6 @@ const getFoundItem = async (query: any, options: any) => {
           updatedAt: true,
         },
       },
-      category: true,
     },
   });
   const total = await prisma.foundItem.count({

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const validateItem = z.object({
-  ItemCategory: z.string({
+  itemCategory: z.string({
     invalid_type_error: "ItemCategory must be string",
     required_error: "ItemCategory is required",
   }),
