@@ -24,6 +24,8 @@ const createUser = async (data: any) => {
   return result;
 };
 
+
+
 export const userService = {
   createUser,
 };

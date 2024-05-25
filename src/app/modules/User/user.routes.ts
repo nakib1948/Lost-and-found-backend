@@ -5,6 +5,10 @@ import { userValidation } from "./user.validation";
 
 const router = express.Router();
 
-router.post("/",validateRequest(userValidation.createUser), userController.createUser);
+router.post(
+  "/",
+  validateRequest(userValidation.createUser),
+  userController.createUser
+);
 
 export const userRoutes = router;

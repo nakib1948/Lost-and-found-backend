@@ -72,7 +72,7 @@ const updateProfile = async (token: string, data) => {
       },
     },
   });
-  console.log(result);
+ 
   const accessToken = jwtToken.generateToken(
     {
       email: result.user.email,
@@ -83,8 +83,31 @@ const updateProfile = async (token: string, data) => {
   );
   return { result, token: accessToken };
 };
+const updatePassword = async (token: string, data) => {
+  const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
+  
+  const getUser = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: decoded.email,
+    },
+  });
+  if (!getUser) {
+    throw new Error("User not found");
+  }
+  if (data.oldpassword !== getUser.password) {
+    throw new Error("Old password don't matched! Try Again");
+  }
+  const result = await prisma.user.update({
+    where: {
+      id: getUser.id,
+    },
+    data: { password: data.newpassword },
+  });
 
+  return result;
+};
 export const profileServices = {
   getProfile,
   updateProfile,
+  updatePassword
 };
