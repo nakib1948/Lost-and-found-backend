@@ -7,5 +7,6 @@ import { itemValidation } from "./lostItem.validation";
 const router = express.Router();
 
 router.post("/",auth(),validateRequest(itemValidation.validateItem), lostItemController.createLostItem);
+router.get("/",auth(), lostItemController.getLostItem);
 
 export const lostItemRoutes = router;

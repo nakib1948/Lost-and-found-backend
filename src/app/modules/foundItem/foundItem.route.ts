@@ -8,5 +8,6 @@ const router = express.Router();
 
 router.post("/",auth(),validateRequest(itemValidation.validateItem), foundItemController.createFoundItem);
 router.get("/", foundItemController.getFoundItem);
+router.get("/userFoundItem", foundItemController.getUserFoundItem);
 
 export const foundItemRoutes = router;

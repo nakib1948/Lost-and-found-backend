@@ -96,7 +96,27 @@ const getFoundItem = async (query: any, options: any) => {
   };
 };
 
+const getUserFoundItem = async (token: string) => {
+  const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
+  const getUser = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: decoded.email,
+    },
+  });
+  if (!getUser) {
+    throw new Error("User not found");
+  }
+  const result = await prisma.foundItem.findMany({
+    where: {
+      userId: getUser.id,
+    },
+  });
+
+  return result;
+};
+
 export const foundItemService = {
   createFoundItem,
   getFoundItem,
+  getUserFoundItem
 };

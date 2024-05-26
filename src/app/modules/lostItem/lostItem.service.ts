@@ -22,7 +22,36 @@ const createLostItem = async (payload, token: any) => {
 
   return result;
 };
+const getLostItem = async (token: string) => {
+  const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
+  const getUser = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: decoded.email,
+    },
+  });
+  if (!getUser) {
+    throw new Error("User not found");
+  }
+  const result = await prisma.lostItem.findMany({
+    where: {
+      userId: getUser.id,
+    },
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+  });
 
+  return result;
+};
 export const lostItemService = {
   createLostItem,
+  getLostItem,
 };

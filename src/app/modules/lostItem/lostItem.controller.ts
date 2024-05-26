@@ -15,7 +15,18 @@ const createLostItem = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getLostItem = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization as string;
+  const result = await lostItemService.getLostItem(token);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "lost item retrieved successfully",
+    data: result,
+  });
+});
 
 export const lostItemController = {
     createLostItem,
+    getLostItem
 };
