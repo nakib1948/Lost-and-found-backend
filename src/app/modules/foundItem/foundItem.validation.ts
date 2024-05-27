@@ -21,6 +21,10 @@ const validateItem = z.object({
     invalid_type_error: "location must be string",
     required_error: "location is required",
   }),
+  district: z.string({
+    invalid_type_error: "district must be string",
+    required_error: "district is required",
+  }),
   phone: z.string({
     invalid_type_error: "phone must be string",
     required_error: "phone is required",

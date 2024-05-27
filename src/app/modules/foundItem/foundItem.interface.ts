@@ -5,6 +5,7 @@ export interface Iitem {
   description: string;
   date: string;
   location: string;
+  district:string;
   phone: string;
   email: string;
   image: string;

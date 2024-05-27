@@ -64,6 +64,7 @@ model FoundItem {
   description         String
   date                String
   location            String
+  district            String             @default("Dhaka")
   phone               String
   image               String
   email               String
