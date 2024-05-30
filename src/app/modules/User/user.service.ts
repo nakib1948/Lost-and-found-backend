@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const createUser = async (data: any) => {
   const { profile, ...userData } = data;
   const result = await prisma.$transaction(async (transactionClient) => {
-    const createuser = await prisma.user.create({
+    const createuser = await transactionClient.user.create({
       data: userData,
     });
     const createUserProfile = await transactionClient.userProfile.create({

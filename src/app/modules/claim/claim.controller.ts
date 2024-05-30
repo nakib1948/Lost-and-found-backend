@@ -24,11 +24,19 @@ const getAllClaim = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getSingleProductClaim = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization;
+  const result = await claimServices.getSingleProductClaim(token,req.params.id);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Claim retrieved successfully",
+    data: result,
+  });
+});
 const updateClaimStatus = catchAsync(async (req: Request, res: Response) => {
   const token = req.headers.authorization as string;
-  const id = req.params.cliamId;
-  const data = {id,status: req.body.status}
-  const result = await claimServices.updateClaimStatus(token,data);
+  const result = await claimServices.updateClaimStatus(token,req.body);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -40,5 +48,6 @@ const updateClaimStatus = catchAsync(async (req: Request, res: Response) => {
 export const claimController = {
   createClaim,
   getAllClaim,
-  updateClaimStatus
+  updateClaimStatus,
+  getSingleProductClaim
 };

@@ -13,11 +13,7 @@ router.post(
   claimController.createClaim
 );
 router.get("/", auth(), claimController.getAllClaim);
-router.put(
-  "/:cliamId",
-  auth(),
-  validateRequest(claimValidation.validateStatusUpdate),
-  claimController.updateClaimStatus
-);
+router.get("/:id", auth(), claimController.getSingleProductClaim);
+router.patch("/", auth(), claimController.updateClaimStatus);
 
 export const claimRoutes = router;

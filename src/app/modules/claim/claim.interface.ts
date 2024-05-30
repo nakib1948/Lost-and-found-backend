@@ -1,5 +1,7 @@
 export interface Iclaim {
-  userId: string;
-  distinguishingFeatures: string;
+  foundItemId: string;
+  claimRequest: string;
+  imageProf : string;
+  phone:string;
   lostDate: string;
 }
