@@ -14,8 +14,29 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-
+const getAllUser = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization as string;
+  const result = await userService.getAllUser(token);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All user retrieved successfully",
+    data: result,
+  });
+});
+const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization as string;
+  const result = await userService.updateUserStatus(token,req.body);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "user status updated successfully",
+    data: result,
+  });
+});
 
 export const userController = {
   createUser,
+  getAllUser,
+  updateUserStatus
 };

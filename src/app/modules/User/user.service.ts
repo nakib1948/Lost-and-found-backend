@@ -1,4 +1,6 @@
 import { PrismaClient } from "@prisma/client";
+import { jwtToken } from "../../utils/jwtToken";
+import config from "../../config";
 
 const prisma = new PrismaClient();
 const createUser = async (data: any) => {
@@ -23,9 +25,44 @@ const createUser = async (data: any) => {
   });
   return result;
 };
+const getAllUser = async (token: string) => {
+  const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
+  const getUser = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: decoded.email,
+      role: "ADMIN"
+    },
+  });
+  if (!getUser) {
+    throw new Error("User not found");
+  }
+  const result = await prisma.user.findMany({});
+  return result;
+};
 
+const updateUserStatus = async (token: string, data) => {
+  const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
+  console.log(data)
+  const getUser = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: decoded.email,
+    },
+  });
+  if (!getUser) {
+    throw new Error("User not found");
+  }
+  const result = await prisma.user.update({
+    where: {
+      id: data.id,
+    },
+    data: { isDeleted:data.status },
+  });
 
+  return result;
+};
 
 export const userService = {
   createUser,
+  getAllUser,
+  updateUserStatus,
 };

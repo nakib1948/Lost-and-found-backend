@@ -8,5 +8,7 @@ const router = express.Router();
 
 router.post("/",auth(),validateRequest(itemValidation.validateItem), lostItemController.createLostItem);
 router.get("/",auth(), lostItemController.getLostItem);
+router.get("/getAllLostItem", lostItemController.getAllLostItem);
+router.patch("/", lostItemController.updateLostItemStatus);
 
 export const lostItemRoutes = router;

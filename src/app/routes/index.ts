@@ -1,7 +1,6 @@
 import express from "express";
 import { userRoutes } from "../modules/User/user.routes";
 import { authRoute } from "../modules/auth/auth.route";
-import { categoryRoutes } from "../modules/foundItemCategory/foundItemCategory.route";
 import { foundItemRoutes } from "../modules/foundItem/foundItem.route";
 import { claimRoutes } from "../modules/claim/claim.route";
 import { profileRoutes } from "../modules/profile/profile.route";
@@ -10,16 +9,12 @@ import { lostItemRoutes } from "../modules/lostItem/lostItem.routes";
 const router = express.Router();
 const moduleRoutes = [
   {
-    path: "/register",
+    path: "/user",
     route: userRoutes,
   },
   {
     path: "/login",
     route: authRoute,
-  },
-  {
-    path: "/found-item-categories",
-    route: categoryRoutes,
   },
   {
     path: "/found-items",
