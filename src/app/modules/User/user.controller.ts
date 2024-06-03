@@ -24,6 +24,16 @@ const getAllUser = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getAllStatistics = catchAsync(async (req: Request, res: Response) => {
+  const token = req.headers.authorization as string;
+  const result = await userService.getAllStatistics(token);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All statistic retrieved successfully",
+    data: result,
+  });
+});
 const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
   const token = req.headers.authorization as string;
   const result = await userService.updateUserStatus(token,req.body);
@@ -38,5 +48,6 @@ const updateUserStatus = catchAsync(async (req: Request, res: Response) => {
 export const userController = {
   createUser,
   getAllUser,
-  updateUserStatus
+  updateUserStatus,
+  getAllStatistics
 };

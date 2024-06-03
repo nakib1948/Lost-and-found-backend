@@ -12,6 +12,7 @@ router.post(
   userController.createUser
 );
 router.get("/", auth(), userController.getAllUser);
+router.get("/statistic", auth(), userController.getAllStatistics);
 router.patch("/", auth(), userController.updateUserStatus);
 
 export const userRoutes = router;

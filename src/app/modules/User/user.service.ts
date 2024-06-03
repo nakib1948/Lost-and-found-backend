@@ -60,9 +60,37 @@ const updateUserStatus = async (token: string, data) => {
 
   return result;
 };
+const getAllStatistics = async (token: string) => {
+  const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
+  const getUser = await prisma.user.findUniqueOrThrow({
+    where: {
+      email: decoded.email,
+    },
+  });
+  if (!getUser) {
+    throw new Error("User not found");
+  }
+  
+  const totalFoundItem = await prisma.foundItem.count({})
+  const totalLostItem = await prisma.lostItem.count({})
+  const totalUser = await prisma.user.count({})
+  const totalBlockUser = await prisma.user.count({
+    where:{
+      isDeleted:"block"
+    }
+  })
+  const ownerFound = await prisma.foundItem.count({
+    where:{
+      status:"Found"
+    }
+  })
+  const result ={totalFoundItem,totalLostItem,totalUser,totalBlockUser,ownerFound}
+  return result;
+};
 
 export const userService = {
   createUser,
   getAllUser,
   updateUserStatus,
+  getAllStatistics
 };
