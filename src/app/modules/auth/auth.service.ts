@@ -7,11 +7,11 @@ const prisma = new PrismaClient();
 const login = async (payload: Ilogin) => {
   const { email, password } = payload;
   const userExist = await prisma.user.findUniqueOrThrow({
-    where: { email },
+    where: { email, isDeleted: "unblock" },
   });
   if (userExist.password !== password)
     throw new Error("Password don't matched");
-  
+
   const accessToken = jwtToken.generateToken(
     {
       email: userExist.email,

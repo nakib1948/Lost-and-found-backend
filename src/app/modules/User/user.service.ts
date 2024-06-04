@@ -42,7 +42,6 @@ const getAllUser = async (token: string) => {
 
 const updateUserStatus = async (token: string, data) => {
   const decoded = jwtToken.verifyToken(token, config.jwt_secret as string);
-  console.log(data)
   const getUser = await prisma.user.findUniqueOrThrow({
     where: {
       email: decoded.email,
