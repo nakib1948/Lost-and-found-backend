@@ -29,6 +29,10 @@ const createUser = zod_1.z.object({
             invalid_type_error: "age must be number",
             required_error: "age is required",
         }),
+        image: zod_1.z.string({
+            invalid_type_error: "image url must be string",
+            required_error: "image url is required",
+        }),
     }),
 });
 exports.userValidation = {

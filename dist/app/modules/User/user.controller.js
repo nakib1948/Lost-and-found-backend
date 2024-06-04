@@ -26,6 +26,39 @@ const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result,
     });
 }));
+const getAllUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    const result = yield user_service_1.userService.getAllUser(token);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "All user retrieved successfully",
+        data: result,
+    });
+}));
+const getAllStatistics = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    const result = yield user_service_1.userService.getAllStatistics(token);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "All statistic retrieved successfully",
+        data: result,
+    });
+}));
+const updateUserStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    const result = yield user_service_1.userService.updateUserStatus(token, req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "user status updated successfully",
+        data: result,
+    });
+}));
 exports.userController = {
     createUser,
+    getAllUser,
+    updateUserStatus,
+    getAllStatistics
 };

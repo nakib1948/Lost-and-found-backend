@@ -23,14 +23,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.foundItemService = void 0;
+exports.lostItemService = void 0;
 const client_1 = require("@prisma/client");
 const jwtToken_1 = require("../../utils/jwtToken");
 const config_1 = __importDefault(require("../../config"));
 const pagination_1 = require("../../utils/pagination");
-const foundItem_constant_1 = require("./foundItem.constant");
+const lostItem_constant_1 = require("./lostItem.constant");
 const prisma = new client_1.PrismaClient();
-const createFoundItem = (payload, token) => __awaiter(void 0, void 0, void 0, function* () {
+const createLostItem = (payload, token) => __awaiter(void 0, void 0, void 0, function* () {
     const decoded = jwtToken_1.jwtToken.verifyToken(token, config_1.default.jwt_secret);
     const getUser = yield prisma.user.findUniqueOrThrow({
         where: {
@@ -41,8 +41,25 @@ const createFoundItem = (payload, token) => __awaiter(void 0, void 0, void 0, fu
         throw new Error("User not found");
     }
     payload.userId = getUser.id;
-    const result = yield prisma.foundItem.create({
+    const result = yield prisma.lostItem.create({
         data: payload,
+    });
+    return result;
+});
+const getLostItem = (token) => __awaiter(void 0, void 0, void 0, function* () {
+    const decoded = jwtToken_1.jwtToken.verifyToken(token, config_1.default.jwt_secret);
+    const getUser = yield prisma.user.findUniqueOrThrow({
+        where: {
+            email: decoded.email,
+        },
+    });
+    if (!getUser) {
+        throw new Error("User not found");
+    }
+    const result = yield prisma.lostItem.findMany({
+        where: {
+            userId: getUser.id,
+        },
         include: {
             user: {
                 select: {
@@ -57,13 +74,13 @@ const createFoundItem = (payload, token) => __awaiter(void 0, void 0, void 0, fu
     });
     return result;
 });
-const getFoundItem = (query, options) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllLostItem = (query, options) => __awaiter(void 0, void 0, void 0, function* () {
     const { searchTerm } = query, filterData = __rest(query, ["searchTerm"]);
     const { limit, page, skip } = (0, pagination_1.calculatePagination)(options);
     const allQuery = [];
     if (query.searchTerm) {
         allQuery.push({
-            OR: foundItem_constant_1.itemSearchAbleFields.map((properites) => ({
+            OR: lostItem_constant_1.itemSearchAbleFields.map((properites) => ({
                 [properites]: {
                     contains: query.searchTerm,
                     mode: "insensitive",
@@ -80,7 +97,7 @@ const getFoundItem = (query, options) => __awaiter(void 0, void 0, void 0, funct
             })),
         });
     }
-    const result = yield prisma.foundItem.findMany({
+    const result = yield prisma.lostItem.findMany({
         where: {
             AND: allQuery,
         },
@@ -103,7 +120,7 @@ const getFoundItem = (query, options) => __awaiter(void 0, void 0, void 0, funct
             },
         },
     });
-    const total = yield prisma.foundItem.count({
+    const total = yield prisma.lostItem.count({
         where: {
             AND: allQuery,
         },
@@ -113,7 +130,7 @@ const getFoundItem = (query, options) => __awaiter(void 0, void 0, void 0, funct
         data: result,
     };
 });
-const getUserFoundItem = (token) => __awaiter(void 0, void 0, void 0, function* () {
+const updateLostItemStatus = (token, data) => __awaiter(void 0, void 0, void 0, function* () {
     const decoded = jwtToken_1.jwtToken.verifyToken(token, config_1.default.jwt_secret);
     const getUser = yield prisma.user.findUniqueOrThrow({
         where: {
@@ -123,15 +140,17 @@ const getUserFoundItem = (token) => __awaiter(void 0, void 0, void 0, function* 
     if (!getUser) {
         throw new Error("User not found");
     }
-    const result = yield prisma.foundItem.findMany({
+    const result = yield prisma.lostItem.update({
         where: {
-            userId: getUser.id,
+            id: data.id,
         },
+        data: { foundStatus: "FOUND" },
     });
     return result;
 });
-exports.foundItemService = {
-    createFoundItem,
-    getFoundItem,
-    getUserFoundItem
+exports.lostItemService = {
+    createLostItem,
+    getLostItem,
+    getAllLostItem,
+    updateLostItemStatus
 };

@@ -37,11 +37,19 @@ const getAllClaim = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+const getSingleProductClaim = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const token = req.headers.authorization;
+    const result = yield claim_service_1.claimServices.getSingleProductClaim(token, req.params.id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Claim retrieved successfully",
+        data: result,
+    });
+}));
 const updateClaimStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const token = req.headers.authorization;
-    const id = req.params.cliamId;
-    const data = { id, status: req.body.status };
-    const result = yield claim_service_1.claimServices.updateClaimStatus(token, data);
+    const result = yield claim_service_1.claimServices.updateClaimStatus(token, req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
@@ -52,5 +60,6 @@ const updateClaimStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void
 exports.claimController = {
     createClaim,
     getAllClaim,
-    updateClaimStatus
+    updateClaimStatus,
+    getSingleProductClaim
 };

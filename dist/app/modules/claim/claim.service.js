@@ -44,6 +44,9 @@ const getAllClaim = (token) => __awaiter(void 0, void 0, void 0, function* () {
         throw new Error("User not found");
     }
     const result = yield prisma.claim.findMany({
+        where: {
+            userId: getUser.id,
+        },
         include: {
             foundItem: {
                 include: {
@@ -56,12 +59,62 @@ const getAllClaim = (token) => __awaiter(void 0, void 0, void 0, function* () {
                             updatedAt: true,
                         },
                     },
-                    category: true,
                 },
             },
         },
     });
-    return result;
+    const importantdata = result.map((data) => ({
+        id: data.id,
+        itemName: data.foundItem.foundItemName,
+        category: data.foundItem.itemCategory,
+        location: data.foundItem.location,
+        phone: data.foundItem.phone,
+        email: data.foundItem.email,
+        status: data.status,
+    }));
+    return importantdata;
+});
+const getSingleProductClaim = (token, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const decoded = jwtToken_1.jwtToken.verifyToken(token, config_1.default.jwt_secret);
+    const getUser = yield prisma.user.findUniqueOrThrow({
+        where: {
+            email: decoded.email,
+        },
+    });
+    if (!getUser) {
+        throw new Error("User not found");
+    }
+    const result = yield prisma.claim.findMany({
+        where: {
+            foundItemId: id,
+        },
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    email: true,
+                },
+            },
+        },
+    });
+    const approvedCheck = yield prisma.claim.findMany({
+        where: {
+            foundItemId: id,
+            status: "APPROVED",
+        },
+    });
+    const importantdata = result.map((data) => ({
+        id: data.id,
+        name: data.user.name,
+        email: data.user.email,
+        lostDate: data.lostDate,
+        phone: data.phone,
+        request: data.claimRequest,
+        status: data.status,
+        image: data.imageProf,
+    }));
+    return { data: importantdata, checkStatus: approvedCheck };
 });
 const updateClaimStatus = (token, data) => __awaiter(void 0, void 0, void 0, function* () {
     const decoded = jwtToken_1.jwtToken.verifyToken(token, config_1.default.jwt_secret);
@@ -73,18 +126,39 @@ const updateClaimStatus = (token, data) => __awaiter(void 0, void 0, void 0, fun
     if (!getUser) {
         throw new Error("User not found");
     }
-    const result = yield prisma.claim.update({
-        where: {
-            id: data.id,
-        },
-        data: {
-            status: data.status,
-        },
-    });
+    const result = yield prisma.$transaction((transactionClient) => __awaiter(void 0, void 0, void 0, function* () {
+        const result = yield transactionClient.claim.update({
+            where: {
+                id: data.id,
+            },
+            data: {
+                status: "APPROVED",
+            },
+        });
+        yield transactionClient.claim.updateMany({
+            where: {
+                foundItemId: data.foundItemId,
+                status: "PENDING",
+            },
+            data: {
+                status: "REJECTED",
+            },
+        });
+        yield transactionClient.foundItem.update({
+            where: {
+                id: data.foundItemId,
+            },
+            data: {
+                status: "Found",
+            },
+        });
+        return result;
+    }));
     return result;
 });
 exports.claimServices = {
     createClaim,
     getAllClaim,
     updateClaimStatus,
+    getSingleProductClaim,
 };

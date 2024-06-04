@@ -7,19 +7,23 @@ const validateItem = zod_1.z.object({
         invalid_type_error: "foundItemId  must be string",
         required_error: "foundItemId is required",
     }),
-    distinguishingFeatures: zod_1.z.string({
-        invalid_type_error: "distinguishingFeatures  must be string",
-        required_error: "distinguishingFeatures  is required",
+    claimRequest: zod_1.z.string({
+        invalid_type_error: "claimRequest  must be string",
+        required_error: "claimRequest  is required",
+    }),
+    imageProf: zod_1.z.string({
+        invalid_type_error: "imageProf  must be string",
+        required_error: "imageProf  is required",
+    }),
+    phone: zod_1.z.string({
+        invalid_type_error: "phone  must be string",
+        required_error: "phone  is required",
     }),
     lostDate: zod_1.z.string({
         invalid_type_error: "lostDate  must be string",
         required_error: "lostDate  is required",
     }),
 });
-const validateStatusUpdate = zod_1.z.object({
-    status: zod_1.z.enum(["APPROVED", "PENDING", "REJECTED"])
-});
 exports.claimValidation = {
     validateItem,
-    validateStatusUpdate
 };

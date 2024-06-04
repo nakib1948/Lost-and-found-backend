@@ -12,5 +12,6 @@ const claim_validation_1 = require("./claim.validation");
 const router = express_1.default.Router();
 router.post("/", (0, auth_1.default)(), (0, validateRequest_1.default)(claim_validation_1.claimValidation.validateItem), claim_controller_1.claimController.createClaim);
 router.get("/", (0, auth_1.default)(), claim_controller_1.claimController.getAllClaim);
-router.put("/:cliamId", (0, auth_1.default)(), (0, validateRequest_1.default)(claim_validation_1.claimValidation.validateStatusUpdate), claim_controller_1.claimController.updateClaimStatus);
+router.get("/:id", (0, auth_1.default)(), claim_controller_1.claimController.getSingleProductClaim);
+router.patch("/", (0, auth_1.default)(), claim_controller_1.claimController.updateClaimStatus);
 exports.claimRoutes = router;

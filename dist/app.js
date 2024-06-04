@@ -9,7 +9,10 @@ const routes_1 = __importDefault(require("./app/routes"));
 const globalErrorHandler_1 = __importDefault(require("./app/middlewares/globalErrorHandler"));
 const notFound_1 = __importDefault(require("./app/middlewares/notFound"));
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: ['https://lost-and-found-system-frontend.vercel.app'],
+    credentials: true,
+}));
 app.use(express_1.default.json());
 app.use('/api', routes_1.default);
 app.get('/', (req, res) => {

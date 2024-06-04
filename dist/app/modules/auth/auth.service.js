@@ -20,13 +20,13 @@ const prisma = new client_1.PrismaClient();
 const login = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = payload;
     const userExist = yield prisma.user.findUniqueOrThrow({
-        where: { email },
+        where: { email, isDeleted: "unblock" },
     });
     if (userExist.password !== password)
         throw new Error("Password don't matched");
     const accessToken = jwtToken_1.jwtToken.generateToken({
         email: userExist.email,
-        role: userExist.name,
+        role: userExist.role,
     }, config_1.default.jwt_secret, config_1.default.expires_in);
     return {
         id: userExist.id,

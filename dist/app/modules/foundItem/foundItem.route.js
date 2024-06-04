@@ -12,4 +12,5 @@ const auth_1 = __importDefault(require("../../middlewares/auth"));
 const router = express_1.default.Router();
 router.post("/", (0, auth_1.default)(), (0, validateRequest_1.default)(foundItem_validation_1.itemValidation.validateItem), foundItem_controller_1.foundItemController.createFoundItem);
 router.get("/", foundItem_controller_1.foundItemController.getFoundItem);
+router.get("/userFoundItem", foundItem_controller_1.foundItemController.getUserFoundItem);
 exports.foundItemRoutes = router;
