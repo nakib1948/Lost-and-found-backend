@@ -1,5 +1,5 @@
 
-# Assignment-8-L2
+# Lost-and-found-backend
 
 ## Description
 
@@ -18,13 +18,13 @@ Make sure you have the following installed:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/nakib1948/Assignment-8-L2.git
+   git clone https://github.com/nakib1948/Lost-and-found-backend.git
    ```
 
 2. Install dependencies:
 
    ```bash
-   cd Assignment-8-L2
+   cd Lost-and-found-backend
    npm install
    ```
 
